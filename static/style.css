@@ -1,0 +1,183 @@
+/* static/style.css - Forced light theme for all components */
+
+#MainMenu,
+footer,
+header {
+    visibility: hidden;
+}
+
+[data-testid="stSidebar"] {
+    display: none;
+}
+
+/* LARGURA TOTAL E FUNDO BRANCO GLOBAL */
+.block-container {
+    padding-top: 1rem !important;
+    max-width: 100% !important;
+}
+
+/* Forçar fundo branco e texto escuro em TUDO */
+[data-testid="stAppViewContainer"],
+.stApp,
+.main,
+.block-container {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+}
+
+/* Header - Tema Claro e Moderno */
+.top-header {
+    background: #f8fafc !important;
+    padding: 20px 32px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+}
+
+.top-header h1 {
+    color: #1e293b !important;
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: 700;
+}
+
+.top-header .stats {
+    color: #64748b !important;
+    font-size: 0.95rem;
+    text-align: right;
+}
+
+.top-header .stats strong {
+    color: #2563eb !important;
+    font-size: 1.2rem;
+}
+
+/* Botões Modernos */
+.stButton>button {
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    padding: 0.5rem 1rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.stButton>button[data-baseweb="button"][kind="primary"] {
+    background: #2563eb !important;
+    color: white !important;
+    border: none !important;
+}
+
+.stButton>button[data-baseweb="button"][kind="secondary"] {
+    background: #f8fafc !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* Cards de Estatísticas */
+.stat-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card h2 {
+    color: #1e293b;
+    font-size: 2rem;
+    margin: 0;
+    font-weight: 800;
+}
+
+.stat-card p {
+    color: #64748b;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+/* Widgets - Select, Input, File Uploader */
+div[data-baseweb="select"]>div,
+input,
+textarea,
+[data-testid="stFileUploadDropzone"] {
+    background-color: #ffffff !important;
+    color: #1e293b !important;
+    border-color: #d1d5db !important;
+}
+
+[data-testid="stFileUploadDropzone"] p,
+[data-testid="stFileUploadDropzone"] span {
+    color: #374151 !important;
+}
+
+/* Tabela e Data Editor */
+[data-testid="stDataEditor"],
+.stDataFrame {
+    background-color: #ffffff !important;
+}
+
+/* Textos e Inputs */
+.stMarkdown p,
+.stText,
+label {
+    color: #334155 !important;
+    font-weight: 500;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #1e293b !important;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Forçar AgGrid a ser claro via CSS se necessário */
+.ag-theme-alpine,
+.ag-theme-balham {
+    --ag-background-color: #ffffff !important;
+    --ag-header-background-color: #f8fafc !important;
+    --ag-odd-row-background-color: #fcfcfc !important;
+    --ag-header-foreground-color: #475569 !important;
+    --ag-foreground-color: #1e293b !important;
+    --ag-border-color: #e2e8f0 !important;
+}
+
+/* Tabs */
+.stTabs [data-baseweb="tab-list"] {
+    background: transparent;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.stTabs [data-baseweb="tab"] {
+    color: #64748b;
+    font-weight: 600;
+    border-radius: 4px 4px 0 0;
+}
+
+.stTabs [aria-selected="true"] {
+    color: #2563eb !important;
+    border-bottom: 2px solid #2563eb;
+}
+
+/* Inputs e Selects */
+[data-testid="stHeader"] {
+    background: #ffffff !important;
+}
+
+div[data-baseweb="select"]>div {
+    background-color: #ffffff !important;
+    color: #1e293b !important;
+    border-color: #e2e8f0 !important;
+}
+
+input {
+    background-color: #ffffff !important;
+    color: #1e293b !important;
+}

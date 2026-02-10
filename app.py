@@ -768,11 +768,16 @@ def init_database():
            ano INTEGER,
            mes_referencia TEXT,
            valor REAL,
-           data_pagamento DATE
+           data_pagamento DATE,
+           cod_local TEXT,
+           diretoria TEXT
         )
     ''')
     
-    cursor.execute('''
+    # Migração para adicionar colunas extras ao historico_pagamentos
+    try: cursor.execute("ALTER TABLE historico_pagamentos ADD COLUMN cod_local TEXT"); except: pass
+    try: cursor.execute("ALTER TABLE historico_pagamentos ADD COLUMN diretoria TEXT"); except: pass
+    try: cursor.execute("ALTER TABLE historico_pagamentos ADD COLUMN safra TEXT"); except: pass
         CREATE TABLE IF NOT EXISTS observacoes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             bolsista_id INTEGER NOT NULL,

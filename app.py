@@ -969,41 +969,42 @@ def processar_importacao_df(df_import, preserve_status=False):
         # Mapeamento de colunas (Excel Maiúsculo -> Banco) - EXPANDIDO
         map_cols = {
             # Matrícula
-            'MATRÍCULA': 'matricula', 'MATRICULA': 'matricula',
+            'MATRÍCULA': 'matricula', 'MATRICULA': 'matricula', 'MATR': 'matricula', 'ID': 'matricula', 'RE': 'matricula', 'REGISTRO': 'matricula',
             # Nome
-            'NOME': 'nome', 'COLABORADOR': 'nome', 'NOMES': 'nome',
+            'NOME': 'nome', 'COLABORADOR': 'nome', 'NOMES': 'nome', 'FUNCIONARIO': 'nome', 'BOLSISTA': 'nome',
             # CPF
             'CPF': 'cpf',
             # Diretoria
-            'DIRETORIA': 'diretoria',
+            'DIRETORIA': 'diretoria', 'AREA': 'diretoria', 'DEPARTAMENTO': 'diretoria', 'DEPTO': 'diretoria',
             # Código Local
-            'COD. LOCAL': 'cod_local', 'COD LOCAL': 'cod_local', 'CODIGO LOCAL': 'cod_local', 'CÓDIGO LOCAL': 'cod_local',
+            'COD. LOCAL': 'cod_local', 'COD LOCAL': 'cod_local', 'CODIGO LOCAL': 'cod_local', 'CÓDIGO LOCAL': 'cod_local', 
+            'CENTRO DE CUSTO': 'cod_local', 'CC': 'cod_local', 'CR': 'cod_local', 'COD_LOCAL': 'cod_local',
             # Curso
             'CURSO': 'curso', 
             # Instituição (várias variantes)
-            'INSTITUIÇÃO': 'instituicao', 'INSTITUICAO': 'instituicao', 'INSTITUI�O': 'instituicao',
+            'INSTITUIÇÃO': 'instituicao', 'INSTITUICAO': 'instituicao', 'INSTITUIO': 'instituicao', 'FACULDADE': 'instituicao', 'UNIVERSIDADE': 'instituicao',
             # Tipo
-            'TIPO': 'tipo',
+            'TIPO': 'tipo', 'NIVEL': 'tipo',
             # Modalidade
             'MODALIDADE': 'modalidade',
             # Início do curso (várias variantes - SEM e COM acento)
             'INÍCIO CURSO': 'inicio_curso', 'INICIO CURSO': 'inicio_curso', 
             'INICIO DO CURSO': 'inicio_curso', 'INÍCIO DO CURSO': 'inicio_curso',
-            'DATA INICIO': 'inicio_curso', 'DATA INÍCIO': 'inicio_curso',
+            'DATA INICIO': 'inicio_curso', 'DATA INÍCIO': 'inicio_curso', 'INICIO': 'inicio_curso',
             # Fim do curso (várias variantes)
             'FIM CURSO': 'fim_curso', 'TERMINO DO CURSO': 'fim_curso', 
             'TÉRMINO DO CURSO': 'fim_curso', 'FIM DO CURSO': 'fim_curso',
-            'DATA FIM': 'fim_curso', 'DATA TERMINO': 'fim_curso',
+            'DATA FIM': 'fim_curso', 'DATA TERMINO': 'fim_curso', 'FIM': 'fim_curso',
             # Ano referência (várias variantes)
             'ANO PROGRAMA': 'ano_referencia', 'ANO': 'ano_referencia',
-            'ANO REFERENCIA': 'ano_referencia', 'ANO REFERÊNCIA': 'ano_referencia',
+            'ANO REFERENCIA': 'ano_referencia', 'ANO REFERÊNCIA': 'ano_referencia', 'SAFRA': 'ano_referencia',
             # Mensalidade
             'MENSALIDADE': 'mensalidade', 'VALOR MENSALIDADE': 'mensalidade',
             'MENSALIDADE PREV CONTRATO': 'mensalidade',
             # Porcentagem
-            '% BOLSA': 'porcentagem', 'PORCENTAGEM': 'porcentagem', '%BOLSA': 'porcentagem',
+            '% BOLSA': 'porcentagem', 'PORCENTAGEM': 'porcentagem', '%BOLSA': 'porcentagem', '%': 'porcentagem',
             # Valor reembolso
-            'VALOR REEMBOLSO': 'valor_reembolso', 'VALOR': 'valor_reembolso',
+            'VALOR REEMBOLSO': 'valor_reembolso', 'VALOR': 'valor_reembolso', 'REEMBOLSO': 'valor_reembolso',
             # Situação
             'SITUAÇÃO': 'situacao', 'SITUACAO': 'situacao', 'STATUS': 'situacao',
             # Checagem
@@ -3913,7 +3914,7 @@ def main():
                     # Botão de Download Excel
                     import io
                     buffer = io.BytesIO()
-                    with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+                    with pd.ExcelWriter(buffer, engine='openpyxl') as writer:
                         df_pivot.to_excel(writer, sheet_name='Resumo')
                         
                     st.download_button(

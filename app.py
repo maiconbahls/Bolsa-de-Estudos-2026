@@ -253,14 +253,19 @@ def get_dataset(source_key):
     try:
         url = GSHEETS_URLS.get(source_key)
         if url:
+             logger.info(f"Tentando conectar ao Google Sheets: {source_key}...")
              # Conexão usa st.secrets automaticamente se configurado, ou o public URL se for público
-             # A autenticação será via st.connection
              conn = st.connection("gsheets", type=GSheetsConnection)
+             # Tenta ler. Se falhar, vai pro except.
              df = conn.read(spreadsheet=url)
+             
              if not df.empty:
-                 logger.info(f"Dados carregados do Google Sheets: {source_key}")
+                 logger.info(f"Dados carregados do Google Sheets: {source_key} | Shape: {df.shape}")
+             else:
+                 logger.warning(f"Google Sheets retornou dados vazios para: {source_key}")
     except Exception as e:
         logger.warning(f"Falha ao conectar Google Sheets [{source_key}]: {e}. Tentando local...")
+        # st.warning(f"Falha na conexão com Google Sheets ({source_key}): {e}") # Opcional: mostrar pro usuário
         df = pd.DataFrame() # Reset para garantir fallback
 
     # 2. Fallback para Excel Local se falhou ou vazio
@@ -269,11 +274,16 @@ def get_dataset(source_key):
         if local_path and os.path.exists(local_path):
             source_name = f"Excel Local ({local_path})"
             df = safe_read_excel(local_path)
-            logger.info(f"Dados carregados localmente: {local_path}")
+            logger.info(f"Dados carregados localmente: {local_path} | Shape: {df.shape}")
+        else:
+            logger.warning(f"Arquivo local não encontrado: {local_path}")
     
-    # 3. Limpeza Padrão (Trim headers)
+    # 3. Limpeza Padrão (Trim headers) e validação
     if not df.empty:
+        # Converter colunas para string e remover espaços
         df.columns = [str(c).strip() for c in df.columns]
+        # Remover colunas vazias se houver
+        df = df.dropna(how='all', axis=1)
     
     return df
 
@@ -1790,14 +1800,21 @@ def main():
             
             if st.button("🔄 Atualizar Base", type="primary", use_container_width=True, help="Sincroniza com Google Sheets ou Excel Local"):
                 try:
+                    # Limpar cache antes de atualizar para garantir dados frescos
+                    st.cache_data.clear()
+                    
                     with st.spinner("Sincronizando dados..."):
                          df_local = get_dataset("BOLSAS")
+                         
                          if not df_local.empty:
+                            st.toast(f"Dados brutos carregados: {len(df_local)} linhas.", icon="📥")
+                            st.write(f"Colunas encontradas: {list(df_local.columns)}") # Debug temporário
                             processar_importacao_df(df_local, preserve_status=not sobrescrever)
                             st.balloons()
                             st.rerun()
                          else:
-                            st.error("Não foi possível carregar os dados (Sheets ou Local).")
+                            st.error("Não foi possível carregar os dados. Verifique a conexão com o Google Sheets e se a planilha não está vazia.")
+                            st.warning("Se estiver usando arquivo local, verifique se ele existe na pasta correta.")
                 except Exception as e:
                     st.error(f"Erro ao sincronizar: {e}")
         

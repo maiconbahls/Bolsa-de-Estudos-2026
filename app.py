@@ -1213,16 +1213,34 @@ def get_diretorias():
     return [d for d in totais if d not in ['NAN', 'NONE', 'N/A', '']]
 
 def get_anos_referencia():
+    """Busca anos de referência únicos no banco de forma robusta"""
     conn = get_conn()
-    # Pega anos distintos, trata nulos como string vazia ou ignora
-    df = pd.read_sql_query("SELECT DISTINCT ano_referencia FROM bolsistas WHERE ano_referencia IS NOT NULL ORDER BY ano_referencia DESC", conn)
-    conn.close()
-    anos = df['ano_referencia'].unique().tolist()
-    # Garantir que 2026 e 2025 estejam na lista se não estiverem
-    for ano in [2026, 2025]:
-        if str(ano) not in [str(a) for a in anos] and ano not in anos:
-            anos.insert(0, ano)
-    return anos
+    try:
+        df = pd.read_sql_query("SELECT DISTINCT ano_referencia FROM bolsistas WHERE ano_referencia IS NOT NULL", conn)
+        anos_brutos = df['ano_referencia'].unique().tolist()
+        anos = []
+        for a in anos_brutos:
+            try:
+                if not a: continue
+                # Tratar strings de data (ex: 2024-01-01)
+                if isinstance(a, str):
+                    if '-' in a: a = a.split('-')[0]
+                    elif '/' in a: a = a.split('/')[-1]
+                    val = int(float(a))
+                else:
+                    val = int(a)
+                anos.append(val)
+            except:
+                continue
+        # Garantir 2026 e 2025
+        res = set(anos)
+        res.add(2025)
+        res.add(2026)
+        return sorted(list(res), reverse=True)
+    except:
+        return [2026, 2025]
+    finally:
+        conn.close()
 
 def gerar_template_excel():
     """Gera um template Excel vazio com as colunas corretas para importação"""

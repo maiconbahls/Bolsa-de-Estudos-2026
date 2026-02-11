@@ -421,6 +421,27 @@ def get_conn() -> sqlite3.Connection:
 # ---------------------------------------------------------------------------
 # UI Components
 # ---------------------------------------------------------------------------
+def format_br_currency(val):
+    """Formata valor para moeda BRL"""
+    if pd.isna(val) or val == "": return "R$ 0,00"
+    try:
+        val = float(val)
+    except:
+        return "R$ 0,00"
+    return f"R$ {val:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+def format_br_number(val):
+    """Formata número para padrão BR"""
+    if pd.isna(val) or val == "": return "0"
+    try:
+        val = float(val)
+    except:
+        return str(val)
+    # Se for inteiro, não mostra casas decimais
+    if val == int(val):
+        return f"{int(val):,}".replace(",", ".")
+    return f"{val:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
 def load_css():
     """Carrega o CSS customizado e força o tema claro."""
     # Estilo base para forçar fundo branco e texto escuro em TUDO
